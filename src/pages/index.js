@@ -14,11 +14,11 @@ export default ({ data }) => {
 
           return (
             <div key={id}>
-              <h5>
+              <h3>
                 <Link to={fields.slug}>{frontmatter.title}</Link>
                 <span className={cls.date}>{frontmatter.date}</span>
-              </h5>
-              <p>{excerpt}</p>
+              </h3>
+              <p className={cls.excerpt}>{excerpt}</p>
             </div>
           )
         })
