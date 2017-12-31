@@ -1,0 +1,24 @@
+.app {
+  margin: 0 auto;
+  max-width: 800px;
+
+  header {
+    display: flex;
+    margin-top: 1rem;
+    line-height: 2rem;
+
+    h1 {
+      flex: 1;
+      margin-top: 0;
+    }
+  }
+
+  .nav {
+    list-style: none;
+
+    li {
+      float: left;
+      margin-left: 1.5rem;
+    }
+  }
+}
