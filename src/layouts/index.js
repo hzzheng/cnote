@@ -5,7 +5,7 @@ import cls from './layout.module.scss'
 export default ({ children }) => (
   <div className={cls.app}>
     <header>
-      <h1>CNOTE</h1>
+      <h1>Cnote</h1>
       <ul className={cls.nav}>
         <li>
           <Link to="/">Home</Link>

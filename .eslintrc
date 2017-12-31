@@ -7,6 +7,7 @@
   "rules": {
     "semi": "off",
     "comma-dangle": "off",
+    "react/no-danger": "off",
     "react/prop-types": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "react/jsx-filename-extension": "off",
