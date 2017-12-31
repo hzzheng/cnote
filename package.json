@@ -12,6 +12,8 @@
     "gatsby-link": "^1.6.32",
     "gatsby-plugin-sass": "^1.0.15",
     "gatsby-plugin-typography": "^1.7.10",
+    "gatsby-source-filesystem": "^1.5.11",
+    "gatsby-transformer-remark": "^1.7.26",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "typography-theme-fairy-gates": "^0.15.11"

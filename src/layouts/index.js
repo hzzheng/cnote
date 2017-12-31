@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'gatsby-link'
-import cls from './index.module.scss'
+import cls from './layout.module.scss'
 
 export default ({ children }) => (
   <div className={cls.app}>

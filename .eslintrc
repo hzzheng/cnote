@@ -1,6 +1,9 @@
 {
   "parser": "babel-eslint",
   "extends": "airbnb",
+  "globals": {
+    "graphql": true
+  },
   "rules": {
     "semi": "off",
     "comma-dangle": "off",
