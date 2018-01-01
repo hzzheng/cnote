@@ -39,7 +39,7 @@ date: "2017-10-27"
 
 以一个单词命名元素。
 
-```
+```css
 .search-form {
   > .field { /* ... */ }
   > .action { /* ... */ }
@@ -50,7 +50,7 @@ date: "2017-10-27"
 
 尽可能使用子元素选择器（直接后代选择器）`>`。这比后代选择器更精确，可以避免意外的样式干扰，执行性能上也会更好。
 
-```
+```css
 .article-card {
   .title     { /* okay */ }
   > .author  { /* ✓ better */ }
@@ -61,7 +61,7 @@ date: "2017-10-27"
 
 对于某些必须使用两个单词表达的元素，直接拼接单词而不使用连字符或下划线。
 
-```
+```css
 .profile-box {
   > .firstname { /* ... */ }
   > .lastname { /* ... */ }
@@ -73,7 +73,7 @@ date: "2017-10-27"
 
 尽可能使用class选择器。标签选择器虽然也能完成工作，但性能上会差一些，并且没有class选择器那么具有描述性。
 
-```
+```css
 .article-card {
   > h3    { /* ✗ avoid */ }
   > .name { /* ✓ better */ }
@@ -90,7 +90,7 @@ date: "2017-10-27"
 
 在变体的class名之前加上连字符`-`前缀。
 
-```
+```css
 .like-button {
   &.-wide { /* ... */ }
   &.-short { /* ... */ }
@@ -102,7 +102,7 @@ date: "2017-10-27"
 
 元素也可能有变体。
 
-```
+```css
 .shopping-card {
   > .title { /* ... */ }
   > .title.-small { /* ... */ }
@@ -120,7 +120,7 @@ date: "2017-10-27"
 
 ![](http://rscss.io/images/component-nesting.png)
 
-```
+```html
 <div class='article-link'>
   <div class='vote-box'>
     ...
@@ -136,7 +136,7 @@ date: "2017-10-27"
 
 嵌套在一个组件内的组件外观可能会和独立使用时有所区别。避免在容器组件内直接修改该组件的样式.
 
-```
+```css
 .article-header {
   > .vote-box > .up { /* ✗ 避免这样做 */ }
 }
@@ -144,7 +144,7 @@ date: "2017-10-27"
 
 更好的替代方案是，给组件增加一个变体class，并且应用该class。如下所示：
 
-```
+```html
 <div class='article-header'>
   <div class='vote-box -highlight'>
     ...
@@ -153,7 +153,7 @@ date: "2017-10-27"
 </div>
 ```
 
-```
+```css
 .vote-box {
   &.-highlight > .up { /* ... */ }
 }
@@ -163,7 +163,7 @@ date: "2017-10-27"
 
 有时，嵌套组件会导致html代码臃肿丑陋。
 
-```
+```html
 <div class='search-form'>
   <input class='input' type='text'>
   <button class='search-button -red -large'></button>
@@ -172,14 +172,14 @@ date: "2017-10-27"
 
 你可以使用css预处理器的`@extend`语法来优化代码。
 
-```
+```html
 <div class='search-form'>
   <input class='input' type='text'>
   <button class='submit'></button>
 </div>
 ```
 
-```
+```css
 .search-form {
   > .submit {
     @extend .search-button;
@@ -210,7 +210,7 @@ date: "2017-10-27"
 
 如果你需要使用以上的一些属性来完成工作，可以在组件所在的上下文环境中使用布局属性。在下面的示例代码中，`width` 和 `float`属性都是应用在`list`组件内的，而不是直接修改组件自身。
 
-```
+```css
 .article-list {
   & {
     @include clearfix;
@@ -234,7 +234,7 @@ date: "2017-10-27"
 
 对于一些常用样式，比如左浮动有浮动，可以写一些通用的帮助类。但这些类名应该组织在一个单独的文件中。这些类名以下划线`_`开头，通常需要在属性后加`!important`标记。请谨慎使用这些帮助类。
 
-```
+```css
 ._unmargin { margin: 0 !important; }
 ._center { text-align: center !important; }
 ._pull-left { float: left !important; }
@@ -255,7 +255,7 @@ date: "2017-10-27"
 
 对于每一个组件，相关的样式放在各自独立的文件中。
 
-```
+```css
 /* css/components/search-form.scss */
 .search-form {
   > .button { /* ... */ }
@@ -272,7 +272,7 @@ date: "2017-10-27"
 
 在sass，stylus等预编译语言中，可以使用通配符引入所有组件样式。
 
-```
+```css
 @import 'components/*';
 ```
 
@@ -280,7 +280,7 @@ date: "2017-10-27"
 
 使用最多一层嵌套。因为过多的嵌套容易引起混乱以致难以维护。
 
-```
+```css
 /* ✗ Avoid: 3 levels of nesting */
 .image-frame {
   > .description {
@@ -303,7 +303,7 @@ date: "2017-10-27"
 
 BEM很不错，但有些人可能会讨厌它不合常规的语法。RSCSS基本符合BEM的思想，但语法上有区别。
 
-```
+```html
 <!-- BEM -->
 <form class='site-search site-search--full'>
   <input  class='site-search__field' type='text'>
@@ -311,7 +311,7 @@ BEM很不错，但有些人可能会讨厌它不合常规的语法。RSCSS基本
 </form>
 ```
 
-```
+```html
 <!-- rscss -->
 <form class='site-search -full'>
   <input  class='field' type='text'>
