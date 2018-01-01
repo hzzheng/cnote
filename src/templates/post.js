@@ -13,7 +13,7 @@ export default ({ data }) => {
         shortname="chuguan"
         identifier={post.frontmatter.title}
         title={post.frontmatter.title}
-        url={`https://chuguan.me/posts/${post.fields.slug}`}
+        url={`https://chuguan.me${post.fields.slug}`}
         category_id={post.frontmatter.title}
       />
     </div>
