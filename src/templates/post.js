@@ -11,10 +11,10 @@ export default ({ data }) => {
 
       <ReactDisqusComments
         shortname="chuguan"
-        identifier="chuguanisme"
-        title="comments"
-        url="https://chuguan.me"
-        category_id="8"
+        identifier={post.frontmatter.title}
+        title={post.frontmatter.title}
+        url={`https://chuguan.me/posts/${post.fields.slug}`}
+        category_id={post.frontmatter.title}
       />
     </div>
   )
@@ -27,6 +27,9 @@ export const query = graphql`
       html
       frontmatter {
         title
+      }
+      fields {
+        slug
       }
     }
   }
