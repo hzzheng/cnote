@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDisqusComments from 'react-disqus-comments'
+import ReactDisqusComments from 'react-disqus-thread'
 import cls from './templates.module.scss'
 
 export default ({ data }) => {
