@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDisqusComments from 'react-disqus-comments'
 import cls from './templates.module.scss'
 
 export default ({ data }) => {
@@ -6,7 +7,15 @@ export default ({ data }) => {
   return (
     <div className={cls.post}>
       <h2>{post.frontmatter.title}</h2>
-      <div dangerouslySetInnerHTML={{ __html: post.html }} />
+      <div className={cls.content} dangerouslySetInnerHTML={{ __html: post.html }} />
+
+      <ReactDisqusComments
+        shortname="chuguan"
+        identifier="chuguanisme"
+        title="comments"
+        url="https://chuguan.me"
+        category_id="8"
+      />
     </div>
   )
 }
