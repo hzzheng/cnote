@@ -18,7 +18,6 @@
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-disqus-comments": "^1.1.1",
-    "react-disqus-thread": "^0.4.0",
     "react-helmet": "^5.2.0",
     "typography-theme-fairy-gates": "^0.15.11"
   },
