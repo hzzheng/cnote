@@ -16,6 +16,7 @@
     "gatsby-transformer-remark": "^1.7.26",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
+    "react-helmet": "^5.2.0",
     "typography-theme-fairy-gates": "^0.15.11"
   },
   "devDependencies": {
