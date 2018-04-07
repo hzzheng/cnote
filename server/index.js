@@ -8,7 +8,7 @@ app.get('/', (req, res) => {
   res.send('hello, world!')
 })
 
-app.get('/api/post-receive', (req, res) => {
+app.post('/api/post-receive', (req, res) => {
   exec('cd .. & git pull origin master & npm run build', (error, stdout) => {
     if (error) {
       console.error(`exec error: ${error}`);
