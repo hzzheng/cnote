@@ -1,5 +1,5 @@
 ---
-title: "理解ES6系列-Class-01"
+title: "理解ES6-Class"
 date: "2018-01-03"
 ---
 

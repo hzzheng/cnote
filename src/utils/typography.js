@@ -1,7 +1,8 @@
 import Typography from 'typography'
 import fairyGateTheme from 'typography-theme-fairy-gates'
 
-fairyGateTheme.baseFontSize = '18px';
+fairyGateTheme.baseFontSize = '16px';
+fairyGateTheme.baseLineHeight = 1.65;
 fairyGateTheme.bodyFontFamily = [
   'PingFang SC', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI',
   'Roboto', 'Helvetica Neue', 'Helvetica', 'Hiragino Sans GB',

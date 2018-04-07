@@ -2,12 +2,15 @@
   "name": "gatsby-starter-hello-world",
   "description": "Gatsby hello world starter",
   "license": "MIT",
+  "version": "1.0.0",
   "scripts": {
     "dev": "gatsby develop",
     "build": "gatsby build",
-    "serve": "gatsby serve"
+    "serve": "gatsby serve",
+    "hook": "node ./server/index.js"
   },
   "dependencies": {
+    "express": "^4.16.3",
     "gatsby": "^1.9.145",
     "gatsby-link": "^1.6.32",
     "gatsby-plugin-sass": "^1.0.15",
