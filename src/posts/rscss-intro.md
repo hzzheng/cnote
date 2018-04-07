@@ -1,5 +1,5 @@
 ---
-title: "RSCSS，一种不错的CSS命名规范"
+title: "RSCSS，简单有效的CSS命名规范"
 date: "2017-10-27"
 ---
 
