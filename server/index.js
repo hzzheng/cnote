@@ -1,3 +1,4 @@
+/* eslint-disable */
 const express = require('express')
 const { exec } = require('child_process')
 
@@ -7,13 +8,13 @@ app.get('/', (req, res) => {
   res.send('hello, world!')
 })
 
-app.get('/post-receive', (req, res) => {
+app.get('/api/post-receive', (req, res) => {
   exec('cd .. & git pull origin master & npm run build', (error, stdout) => {
     if (error) {
-      console.error(`exec error: ${error}`); // eslint-disable-line 
+      console.error(`exec error: ${error}`);
       return;
     }
-    console.log(`stdout: ${stdout}`); // eslint-disable-line 
+    console.log(`stdout: ${stdout}`);
   })
   res.send({
     ok: true
@@ -21,5 +22,5 @@ app.get('/post-receive', (req, res) => {
 })
 
 app.listen(3000, () => {
-  console.log('listening on port 3000'); // eslint-disable-line
+  console.log('listening on port 3000');
 })
