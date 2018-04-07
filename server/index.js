@@ -14,7 +14,7 @@ app.post('/api/post-receive', (req, res) => {
       console.error(`exec error: ${error}`);
       return;
     }
-    console.log(`std-out: ${stdout}`);
+    console.log(`stdout: ${stdout}`);
   })
   res.send({
     ok: true
