@@ -25,11 +25,6 @@ export default ({ children }) => (
           </Link>
         </li>
         <li>
-          <Link to="/blog" {...active}>
-            Blog
-          </Link>
-        </li>
-        <li>
           <Link to="/about" {...active}>
             About
           </Link>
