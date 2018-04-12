@@ -14,7 +14,7 @@ date: "2017-10-27"
 
 以组件化的方式思考。把UI上每一块内容抽象成一个“component”，如下图所示：
 
-![](http://rscss.io/images/component-example.png)
+![](https://chuguan.me/static/component-example.png)
 
 #### 如何命名组件
 
@@ -23,13 +23,12 @@ date: "2017-10-27"
 - 一个点赞按钮（`.like-button`）
 - 一个搜索表单（`.search-form`）
 - 一个新闻文章卡片 （`.article-card`）
-- 一个命名空间组件（`.rico-custom-header`）
 
 ### 二、元素-Elements
 
 元素包含在组件之内，如下图所示：
 
-![](http://rscss.io/images/component-elements.png)
+![](https://chuguan.me/static/component-elements.png)
 
 #### 如何命名元素
 
@@ -80,7 +79,7 @@ date: "2017-10-27"
 
 组件和元素都有可能存在变体，如下图所示：
 
-![](http://rscss.io/images/component-modifiers.png)
+![](https://chuguan.me/static/component-modifiers.png)
 
 #### 如何命名变体
 
@@ -114,7 +113,7 @@ date: "2017-10-27"
 
 ### 四、嵌套组件-Nested components
 
-![](http://rscss.io/images/component-nesting.png)
+![](https://chuguan.me/static/component-nesting.png)
 
 ```html
 <div class='article-link'>
@@ -187,7 +186,7 @@ date: "2017-10-27"
 
 ### 五、布局设计-Layouts
 
-![](http://rscss.io/images/layouts.png)
+![](https://chuguan.me/static/layouts.png)
 
 #### 避免一些布局属性
 
