@@ -5,30 +5,30 @@ import cls from './layout.module.scss'
 
 require('prismjs/themes/prism-tomorrow.css')
 
-const active = { activeStyle: { backgroundImage: 'none' } }
+// const active = { activeStyle: { backgroundImage: 'none' } }
 
 export default ({ children }) => (
   <div className={cls.app}>
     <Helmet>
-      <title>Cnote</title>
+      <title>CNOTE</title>
     </Helmet>
     <header>
       <h1>
-        <Link to="/">
-          Cnote
+        <Link to="/" className={cls.logo}>
+          CNOTE
         </Link>
       </h1>
       <ul className={cls.nav}>
-        <li>
+        {/* <li>
           <Link to="/" exact {...active}>
-            Home
+            HOME
           </Link>
-        </li>
-        <li>
+        </li> */}
+        {/* <li>
           <Link to="/about" {...active}>
-            About
+            ABOUT
           </Link>
-        </li>
+        </li> */}
       </ul>
     </header>
     {children()}

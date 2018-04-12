@@ -3,10 +3,10 @@ title: "免费启用HTTPS"
 date: "2017-11-20"
 ---
 
-昨天花了一些时间把原来使用Ghost搭建的博客，迁移到了Gatsby。发现之前使用[Let’s Encrypt](https://letsencrypt.org/)的免费方案已过期，于是重新去[酷壳](https://coolshell.cn/articles/18094.html)找了一下左耳朵耗子老师的那篇文章。因为使用的系统和左老师不一样，并且启用过程遇到了一点小坑，所以也记录一下。
+昨天花了一些时间将之前的Ghost博客改用灵活强大的Gatsby重新搭建，顺带启用了HTTPS。HTTPS使用的是[Let’s Encrypt](https://letsencrypt.org/)提供的免费方案。具体的配置步骤如下：
 
 1. 打开[https://certbot.eff.org](https://certbot.eff.org) 网站
-2. 选择你使用的web服务器和操作系统，我的是`nginx`和`CentOS 6`
+2. 选择你使用的web服务器和操作系统，我的是`Nginx`和`CentOS 6`
 3. 选择后会跳转到安装教程页，照着做一遍就可以
 
 以我的选择为例，上面第三步需要执行的命令如下:
@@ -30,7 +30,7 @@ The nginx plugin is not working; there may be problems with your existing config
 The error was: NoInstallationError()
 ```
 
-google后在certbot仓库的[issue](https://github.com/certbot/certbot/issues/4937)下面找到了解决办法。报错是因为找不到nginx，配置一下软链即可：
+Google后在certbot仓库的[issue](https://github.com/certbot/certbot/issues/4937)下面找到了解决办法。报错是因为找不到nginx，配置一下软链即可：
 
 ```bash
 ln -s /usr/local/nginx/sbin/nginx /usr/bin/nginx
