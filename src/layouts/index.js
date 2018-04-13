@@ -1,6 +1,8 @@
 import React from 'react'
 import Link from 'gatsby-link'
 import Helmet from 'react-helmet'
+
+import favicon from '../assets/favicon.ico'
 import cls from './layout.module.scss'
 
 require('prismjs/themes/prism-tomorrow.css')
@@ -11,6 +13,7 @@ export default ({ children }) => (
   <div className={cls.app}>
     <Helmet>
       <title>CNOTE</title>
+      <link rel="shortcut icon" href={favicon} />
     </Helmet>
     <header>
       <h1>
