@@ -28,8 +28,8 @@ export default ({ children }) => (
           </Link>
         </li> */}
         {/* <li>
-          <Link to="/about" {...active}>
-            ABOUT
+          <Link to="/contact" {...active}>
+            Contact
           </Link>
         </li> */}
       </ul>
