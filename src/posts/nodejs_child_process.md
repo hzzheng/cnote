@@ -6,7 +6,7 @@ origin: "https://medium.freecodecamp.org/node-js-child-processes-everything-you-
 
 ![](https://chuguan.me/static/child_process.png)
 
-虽然Node.js单线程执行js，但非阻塞的特性依然能使它的单进程应用性能良好。话虽如此，单CPU单进程的方式不足以处理应用程序日益增长的工作负载。
+就单进程而言，Node.js的单线程非阻塞执行模型表现良好。然而，单CPU单进程的方式不足以处理应用程序日益增长的工作负载。
 
 无论你的服务器有多强大，需要承认的是，单线程只能承受有限的负荷。
 
