@@ -365,3 +365,145 @@ inoutStream.currentCharCode = 65;
 process.stdin.pipe(inoutStream).pipe(process.stdout);
 ```
 
+通过结合两个方法，我们可以使用这个双向流读取从A到Z的字符，也可以使用它的回声echo特性。我们pipe可读流stdin到这个双向流以使用回声功能，然后再pipe这个双向流到可写流stout打印从A到Z的字符。
+
+理解这个双向流可读和可写操作是完全相互独立的很重要。它仅仅组合了两个特性到一个流对象中。
+
+转换流是一种更有趣的双向流，因为它的输入经过计算会成为它的输出。
+
+对于一个转换流，我们不需要实现read和write方法，我们只需要实现transform方法即可。这个方法结合了两者。它的入参和write方法一样，并且我们可以在方法内部使用push方法。
+
+下面的例子展示了一个简单的双向流，把会把任何的输入字符转成大写后再返回出去。注意观察使用了push方法把数据变成了可读流的部分。
+
+```javascript
+const { Transform } = require('stream');
+
+const upperCaseTr = new Transform({
+  transform(chunk, encoding, callback) {
+    this.push(chunk.toString().toUpperCase());
+    callback();
+  }
+});
+
+process.stdin.pipe(upperCaseTr).pipe(process.stdout);
+```
+
+#### Streams 对象模式
+
+默认情况下，streams期望Buffer/String类型的值。但我们可以通过设置objectMode使流能够接收Javascript对象。
+
+下面的简单例子证明了这一点。通过结合不同的转换流实现了从一个逗号分隔字符串转变成Javascript对象的功能，即`a,b,c,d`变成了`{a: b, c: d}`。
+
+```javascript
+const { Transform } = require('stream');
+const commaSplitter = new Transform({
+  readableObjectMode: true,
+  transform(chunk, encoding, callback) {
+    this.push(chunk.toString().trim().split(','));
+    callback();
+  }
+});
+const arrayToObject = new Transform({
+  readableObjectMode: true,
+  writableObjectMode: true,
+  transform(chunk, encoding, callback) {
+    const obj = {};
+    for(let i=0; i < chunk.length; i+=2) {
+      obj[chunk[i]] = chunk[i+1];
+    }
+    this.push(obj);
+    callback();
+  }
+});
+const objectToString = new Transform({
+  writableObjectMode: true,
+  transform(chunk, encoding, callback) {
+    this.push(JSON.stringify(chunk) + '\n');
+    callback();
+  }
+});
+process.stdin
+  .pipe(commaSplitter)
+  .pipe(arrayToObject)
+  .pipe(objectToString)
+  .pipe(process.stdout)
+```
+
+我们传给commaSplitter流`a,b,c,d`，它会转换成数组`["a", "b", "c", "d"]`并push到它的可读流数据。增加`readableObjectMode`标识是必须要的，因为我们push了一个对象，而非字符串。
+
+然后我们继续pipe到arrayToObject流。我们需要`writableObjectMode`标识使得这个流能接收一个对象。它同时把数组转成的对象push到了可读流数据中，这是为什么还需要加`readableObjectMode`标识的原因。最后的`objectToString`流接收这个对象，然后转成字符串并push到它的可读流部分，当然为了能接收对象，我们也需要给它设置`writableObjectMode`。
+
+![](https://chuguan.me/static/stream-08.png)
+
+#### Node内置的转换流
+
+Node有一些非常有用的内置转换流，即zlib和crypto流。
+
+下面的例子展示了结合zlib.createGzip()和fs的可读/可写流实现文件压缩的功能：
+
+```javascript
+const fs = require('fs');
+const zlib = require('zlib');
+const file = process.argv[2];
+
+fs.createReadStream(file)
+  .pipe(zlib.createGzip())
+  .pipe(fs.createWriteStream(file + '.gz'));
+```
+
+你可以使用这个脚本gzip压缩任何作为参数传入的文件。我们pipe文件的可读流到zlib内置的转换流，然后再pipe到一个可写流生成压缩后的文件。非常简单。
+
+最酷的事情是，在使用pipe方式的同时，我们还能根据需要使用事件。举例来说，比如我想在脚本压缩的时候展示进度提示，并且在结束时打印`Done`信息。因为pipe方法返回目标流，我们可以链式地注册事件处理程序。
+
+```javascript
+const fs = require('fs');
+const zlib = require('zlib');
+const file = process.argv[2];
+
+fs.createReadStream(file)
+  .pipe(zlib.createGzip())
+  .on('data', () => process.stdout.write('.'))
+  .pipe(fs.createWriteStream(file + '.zz'))
+  .on('finish', () => console.log('Done'));
+```
+
+通过使用pipe方法，我们能轻易地消费流。但同时，我们也可以通过事件的方式更进一步地定制和流的交互过程。
+
+pipe非常棒的一点还在于，通过它我们可以一小块一小块地组织我们的程序，使代码非常易读。举个例子，我们可以不用data事件，而是创建一个转换流来反馈进度：
+
+```javascript
+const fs = require('fs');
+const zlib = require('zlib');
+const file = process.argv[2];
+
+const { Transform } = require('stream');
+
+const reportProgress = new Transform({
+  transform(chunk, encoding, callback) {
+    process.stdout.write('.');
+    callback(null, chunk);
+  }
+});
+
+fs.createReadStream(file)
+  .pipe(zlib.createGzip())
+  .pipe(reportProgress)
+  .pipe(fs.createWriteStream(file + '.zz'))
+  .on('finish', () => console.log('Done'));
+```
+
+reportProgress流是一个简单的`pass-through`流，除了在标准输出中打印进度没有做其他事情。注意到我通过给callback传递第二个参数的方式push了数据。
+
+组合流的使用方式是无限的。比如，我们可以根据需要在文件压缩前或者压缩后进行加密。我们需要做的只是按照准确的顺序，把这个流加入到pipe调用链中，下面展示了如何使用crypto模块：
+
+```javascript
+const crypto = require('crypto');
+// ...
+fs.createReadStream(file)
+  .pipe(zlib.createGzip())
+  .pipe(crypto.createCipher('aes192', 'a_secret'))
+  .pipe(reportProgress)
+  .pipe(fs.createWriteStream(file + '.zz'))
+  .on('finish', () => console.log('Done'));
+```
+
