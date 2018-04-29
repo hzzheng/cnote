@@ -507,3 +507,20 @@ fs.createReadStream(file)
   .on('finish', () => console.log('Done'));
 ```
 
+上面的脚本先压缩然后再加密了文件，所以只有有密码的人才能使用输出后的文件。我不能直接解压缩因为它被加密了。
+
+为了能解压缩任何被被上面脚本压缩的文件，我们需要使用功能相反的流以相反的顺序去解密和解压缩。如下所示：
+
+```javascript
+fs.createReadStream(file)
+  .pipe(crypto.createDecipher('aes192', 'a_secret'))
+  .pipe(zlib.createGunzip())
+  .pipe(reportProgress)
+  .pipe(fs.createWriteStream(file.slice(0, -3)))
+  .on('finish', () => console.log('Done'));
+```
+
+假设最初传入的文件是压缩的版本，上面的代码会先从这个文件创建一个可读流，然后pipe到cryto进行解密，再pipe到zlib进行解压缩。最后把数据导出到一个不带扩展名的文件中。
+
+以上就是关于stream这个话题的所有内容，谢谢阅读。
+
