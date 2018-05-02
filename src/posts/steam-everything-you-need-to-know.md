@@ -5,21 +5,20 @@ origin: "https://medium.freecodecamp.org/node-js-streams-everything-you-need-to-
 ---
 
 
-![](https://chuguan.me/static/stream.jpeg)
-Node.js的streams向来被认为难以使用，更难于理解。现在我有一个好消息告诉你，这种情况马上就会被改变。
+![](https://chuguan.me/static/stream.jpg)
+Node.js的streams向来被认为难以使用，更难于理解。不过现在有一个好消息告诉你，看过这篇文章后前面的话就可以收回了。
 
-在过去的几年里，很多开发者为了能够更好更容易地使用streams，写了很多的模块。但在这篇文章里，我只关注原生的Node.js stream API。
+在过去的几年里，很多开发者为了能够更容易地使用streams，写了很多的模块。但在这篇文章里，我只关注原生的Node.js stream API。
 
-> Streams是Node最好但也是最被误解的理念
+> Streams是Node最好但也是最被误解的概念
 
 -- *Dominic Tarr*
 
-
 ### Streams究竟是什么？
 
-Streams是数据的集合，就像数组和字符串一样。不同在于，streams的数据集合在某一个时刻不一定全都能访问，因为不一定都在内存中，也因此不受内存大小限制。这使得streams非常擅长处理大体积数据，或者擅长某些从外部源一次只能获取一部分数据的场景。
+Streams是数据的集合，就像数组和字符串一样。不同的地方在于，streams集合中的数据在某一个时刻不一定全都能被访问，因为这些数据不一定同时都在内存中。也因此，streams的使用不受内存大小的限制，这使得streams非常擅长处理大块的数据，或者擅长某些从外部源一次只能获取一部分数据的场景。
 
-除了可以处理大数据以外，streams还赋予了我们代码组合的能力。就像我们可以通过管道piping的方式组合强大的linux命名，在Node里也可以通过streams实现一样的效果。
+除了可以处理大块的数据以外，streams还赋予了我们组合代码的能力。就像我们可以通过管道pipe的方式组合强大的Linux命名，在Node里也可以通过streams实现一样的效果。
 
 ![](https://chuguan.me/static/stream-01.png)
 
@@ -29,19 +28,19 @@ const wc = ... // A stream for the wc input
 grep.pipe(wc)
 ```
 
-许多Node内置的模块都实现了streaming接口：
+许多Node内置的模块都实现了stream接口：
 
 ![](https://chuguan.me/static/stream-02.png)
 
-上面列举了一些或是可或是可写streams的Node.js原生对象。其中有一些streams既可读也可写，比如TCP sockets, zib 和 crypto streams。
+上面列举了一些或可读或可写streams的Node.js原生对象。其中有一些streams既可读也可写，比如TCP sockets, zib 和 crypto streams。
 
 需要注意一些紧密相关的对象。比如，HTTP的响应response，在客户端是可读stream，但在服务端是可写stream。这是因为，对于HTTP请求来说，我们需要读接收到的信息(http.IncomingMessage)，然后写入到其他响应(http.ServerResponse)。
 
-对于子进程child_process，需要注意的是相比主进程，标准输入输出stdio流(stdin, stdout, stderr)有相反的stream类型。这为父子进程之间stdio输入输出(pipe)提供了便利。
+对于子进程child_process，需要注意的是，相比主进程，标准输入输出stdio流(stdin, stdout, stderr)有相反的stream类型。这为父子进程之间stdio输入输出pipe操作提供了便利。
 
 #### 一个实际的例子
 
-理论是好的，但并没有100%的说服力。我们来看一个例子，证明在内存消耗上streams是如何地不同。
+理论是好的，但例子更有说服力。我们来看一个例子，证明在内存消耗上streams是如何的不同。
 
 我们先创建一个大文件：
 
@@ -58,7 +57,7 @@ file.end();
 
 注意，我使用了可写流(writable stream)来创建这个大文件。
 
-`fs`模块可以用stream接口来读或者写文件。上面的例子中，我们轮换了一百万次，每次写入一行文字到big.file文件中。
+`fs`模块可以用stream接口来读或者写文件。上面的例子中，我们循环了一百万次，每次写入一行文字到big.file文件中。
 
 运行上面的脚本会创建一个大约400MB的文件。
 
@@ -79,7 +78,7 @@ server.on('request', (req, res) => {
 server.listen(8000);
 ```
 
-当这个服务器接收到一个请求时，我们会使用异步的`fs.readFile`方法响应big.file文件。看上去我们不会阻塞事件循环或者其他任何的执行。一切都非常棒，对不对？可是，真的对吗？
+当这个服务器接收到一个请求时，我们会使用异步的`fs.readFile`方法响应big.file文件。看上去我们不会阻塞事件循环，一切都非常棒，对不对？可是真的对吗？
 
 那么让我们来看下服务器运行并接收到请求时内存的使用究竟发生了什么。
 
@@ -118,7 +117,7 @@ server.listen(8000);
 
 发生了什么？
 
-当客户端请求这个big.file文件时，我们通过stream的方式每次返回一小块数据，这意味着我们不用再内存中缓存整个文件。如上所示，内存的使用仅仅增加到25MB而已。
+当客户端请求这个big.file文件时，我们通过stream的方式每次返回一小块数据，这意味着我们不用在内存中缓存整个文件。如上所示，内存的使用仅仅增加到25MB而已。
 
 你可以尝试极端的情况，比如循环500万次生成一个2GB的big.file文件，这实际上已经大于Node默认的内存限制。
 
@@ -135,7 +134,7 @@ Node.js中一共有四种类型的stream: Readable, Writable, Duplex, 以及Tran
 - 一个可读流（readable stream）是对一个数据源的抽象。fs.createReadStream即是一个例子。
 - 一个可写流（writable stream）是对一个数据写入目标的抽象。fs.createWriteStream即是一个例子。
 - 一个双向流（duplex streams）同时可读可写，TCP socket即是一个例子。
-- 一个转换流（transform stream）也是双向流，只不过在读写的时候可以修改或转换数据。用于gzip压缩的zlib.createGzip即是一个例子。你可以把转换流看成是一个函数，可写流是输入，可读流是输出。你可能也听说过，转换流有时候也被称“through streams”。
+- 一个转换流（transform stream）也是双向流，只不过在读写的时候可以修改或转换数据。用于gzip压缩的zlib.createGzip即是一个例子。你可以把转换流看成是一个函数，可写流是输入，可读流是输出。你可能也听说过，转换流有时候也被称为“through streams”。
 
 所有的streams都是EventEmitter实例。可以监听触发的事件进行读写数据的操作。我们还可以用pipe方法更简单地消费流数据。
 
@@ -147,7 +146,7 @@ Node.js中一共有四种类型的stream: Readable, Writable, Duplex, 以及Tran
 readableSrc.pipe(writableDest)
 ```
 
-上面简单的代码展示了如何将作为数据源的可读流pipe到一个可写流。数据源需要是一个可读流，目标需要是一个可写流。当然，它们都可以用双向流/转换流替代。实际上，我们可以pipe到一个双向流，然后实现一个链式的pipe过程，就像我们在Linux中做的一样：
+上面展示了如何将作为数据源的可读流pipe到一个可写流。数据源需要是一个可读流，目标需要是一个可写流。当然，它们都可以用双向流/转换流替代。实际上，我们可以pipe到一个双向流，然后实现一个链式的pipe过程，就像我们在Linux中做的一样：
 
 ```javascript
 readableSrc
@@ -168,11 +167,11 @@ c.pipe(d)
 $ a | b | c | d
 ```
 
-pipe方法是消费流最简单的方式。我们一般建议要么使用pipe方法，要么使用事件的方式消费流，应该避免同时使用两者。通常来说，当你使用pipe方法的时候你不需要再使用事件。但是如果你想使用自定义的方式消费流，那么事件更合适。
+pipe方法是消费流最简单的方式。我们一般建议要么使用pipe方法，要么使用事件的方式消费流，应该避免同时使用两者。通常来说，当你使用pipe方法的时候你不需要再使用事件。但是如果你想使用自定义的方式消费流，那么事件或许更合适。
 
 #### 流事件
 
-除了从可读流读取数据，然后写入可写流，pipe方法还自动做了一些其他事情。比如，它处理了错误，文件结束，以及一个流比另一个更快或更慢的情况。
+除了从可读流读取数据，然后写入可写流，pipe方法还自动做了一些其他事情。比如，它处理了错误、文件结束、以及一个流比另一个更快或更慢的情况。
 
 流也可以直接通过事件被消费。下面是用事件的方式完成了pipe方法相同功能的代码：
 
@@ -190,7 +189,7 @@ readable.on('end', () => {
 
 ![](https://chuguan.me/static/stream-06.png)
 
-事件和函数某种程度上是相关的因为它们通常一起使用。
+事件和函数某种程度上是相关的，因为它们通常一起使用。
 
 可读流最重要的事件是：
 
@@ -215,9 +214,9 @@ readable.on('end', () => {
 
 所有的可读流都是从paused模式开始，但它们可以非常容易地转换成flowing模式，并且在需要的时候也能转换回来。有时候，这种转换是自动进行的。
 
-当一个可读流处在paused模式，我们可以使用read()方法根据需求从流中读取数据。对于处在flowing模式下的可读流，数据在不停地流动，我们必须监听事件来消费它。
+当一个可读流处在paused模式，我们可以使用read()方法根据需要从流中读取数据。对于处在flowing模式下的可读流，数据在不停地流动，我们必须监听事件来消费它。
 
-在flowing模式下，如果没有消费者处理它，数据实际上会丢失。这是为什么，当我们有一个在flowing模式下的可读流，我们需要有一个data事件处理程序。实际上，当我们添加一个data事件处理程序，pause模式就会转变横flowing模式。当我们移除data事件处理程序，模式会转换回pause模式。这么处理的部分原因是为了向后兼容老的Node streams接口。
+在flowing模式下，如果没有消费者处理它，数据实际上会丢失。这就是为什么当我们有一个在flowing模式下的可读流，我们需要有一个data事件处理程序。实际上，当我们添加一个data事件处理程序，paused模式就会转变横flowing模式。当我们移除data事件处理程序，模式会转换回paused模式。这么处理的部分原因是为了向后兼容老的Node streams接口。
 
 如果要手动在两种模式之间切换，我们可以使用resume()和pause()方法。
 
@@ -270,16 +269,15 @@ process.stdin.pipe(outStream);
 
 - chunk，通常是一个buffer除非对这个流进行了不同的配置。
 - encoding，通常我们可以忽略它。
-- callback，这个函数式我们处理完数据块后需要调用的，用来通知是否写成功。如果想通知写失败了，可以在调用的时候传入一个error对象。
-
+- callback，这个函数是我们处理完数据块后需要调用的，用来通知是否写成功。如果想通知写失败了，可以在调用的时候传入一个error对象。
 
 在outStream流实现中，我们简单地把数据块转成字符串打印出来。然后调用callback，通知没有错误发生。这是一个简单可能也没太大用处的echo流。它会echo所有它接收到的内容。
 
-如果要消费这个流，我们可以简单地使用process.stdin这个可读流，我们可以把process.stdin流pipe到我们的outStream。
+如果要消费这个流，我们可以简单地使用process.stdin这个可读流，把process.stdin流pipe到我们的outStream。
 
 当我们运行上面的代码，任何我们输入到process.stdin中的内容会被console.log打印出来。
 
-这个流用处不大，并且实际上已经被Node内置实现了。这个流类似process.stdout。下面的折行代码可以实现完全一样的功能：
+这个流用处不大，并且实际上已经被Node内置实现了。这个流类似process.stdout。下面的代码可以实现完全一样的功能：
 
 ```javascript
 process.stdin.pipe(process.stdout);
@@ -373,7 +371,7 @@ process.stdin.pipe(inoutStream).pipe(process.stdout);
 
 对于一个转换流，我们不需要实现read和write方法，我们只需要实现transform方法即可。这个方法结合了两者。它的入参和write方法一样，并且我们可以在方法内部使用push方法。
 
-下面的例子展示了一个简单的双向流，把会把任何的输入字符转成大写后再返回出去。注意观察使用了push方法把数据变成了可读流的部分。
+下面的例子展示了一个简单的双向流，会把任何的输入字符转成大写后再返回出去。注意观察使用了push方法把数据变成了可读流的部分。
 
 ```javascript
 const { Transform } = require('stream');
