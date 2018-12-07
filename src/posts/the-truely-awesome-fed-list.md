@@ -22,5 +22,7 @@ Github上有很多Awesome List。这些List通常包含非常多的内容，Star
 
 4. [30-seconds-of-code](https://github.com/30-seconds/30-seconds-of-code#deepclone) 罗列了非常多有用且简短的JS代码。没事多看看，相信能够给你灵感帮你写出更好的代码。
 
+5. [Mostly adequate guide to FP](https://github.com/MostlyAdequate/mostly-adequate-guide) 一本不错的小册子，以JS为编程语言讲解函数式编程。
+
 // 未完待续
 
